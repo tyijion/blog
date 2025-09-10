@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSONPath 语法参考</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-left: 4px solid #3498db;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .example {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #5dade2;
+            margin: 15px 0;
+        }
+        .note {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .try-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .try-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>JSONPath 语法参考</h1>
+    
+    <section>
+        <h2>什么是 JSONPath？</h2>
+        <p>JSONPath 是一种用于从 JSON 文档中提取数据的查询语言，类似于 XML 的 XPath。它提供了一种简单的方式来导航和提取 JSON 结构中的数据。</p>
+    </section>
+    
+    <section>
+        <h2>基本语法</h2>
+        
+        <table>
+            <tr>
+                <th>表达式</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+            <tr>
+                <td><code>$</code></td>
+                <td>根对象或元素</td>
+                <td><code>$.store.book[0].title</code></td>
+            </tr>
+            <tr>
+                <td><code>@</code></td>
+                <td>当前对象或元素（在过滤表达式中使用）</td>
+                <td><code>$.store.book[?(@.price < 10)]</code></td>
+            </tr>
+            <tr>
+                <td><code>.</code> 或 <code>[]</code></td>
+                <td>子元素操作符</td>
+                <td><code>$.store.book[0].title</code> 或 <code>$['store']['book'][0]['title']</code></td>
+            </tr>
+            <tr>
+                <td><code>*</code></td>
+                <td>通配符，匹配所有元素</td>
+                <td><code>$.store.book[*].author</code></td>
+            </tr>
+            <tr>
+                <td><code>..</code></td>
+                <td>递归下降，搜索所有层次</td>
+                <td><code>$..author</code></td>
+            </tr>
+            <tr>
+                <td><code>[start:end:step]</code></td>
+                <td>数组切片操作</td>
+                <td><code>$.store.book[0:3]</code></td>
+            </tr>
+            <tr>
+                <td><code>?(expression)</code></td>
+                <td>过滤表达式</td>
+                <td><code>$.store.book[?(@.price < 10)]</code></td>
+            </tr>
+        </table>
+    </section>
+    
+    <section>
+        <h2>示例 JSON</h2>
+        <p>以下示例将使用这个 JSON 文档：</p>
+        <p>
+            <a href="https://toolsjy.com/json/" target="_blank" class="try-button">
+                在线工具试一下
+            </a>
+        </p>
+        <pre><code>{
+    "store": {
+        "book": [
+            {
+                "category": "reference",
+                "author": "Nigel Rees",
+                "title": "Sayings of the Century",
+                "price": 8.95
+            },
+            {
+                "category": "fiction",
+                "author": "Evelyn Waugh",
+                "title": "Sword of Honour",
+                "price": 12.99
+            },
+            {
+                "category": "fiction",
+                "author": "Herman Melville",
+                "title": "Moby Dick",
+                "isbn": "0-553-21311-3",
+                "price": 8.99
+            },
+            {
+                "category": "fiction",
+                "author": "J.R.R. Tolkien",
+                "title": "The Lord of the Rings",
+                "isbn": "0-395-19395-8",
+                "price": 22.99
+            }
+        ],
+        "bicycle": {
+            "color": "red",
+            "price": 19.95
+        }
+    },
+    "expensive": 10
+}</code></pre>
+    </section>
+    
+    <section>
+        <h2>JSONPath 示例</h2>
+        
+        <div class="example">
+            <h3>1. 获取所有书籍的作者</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.book[*].author</code></p>
+            <p><strong>结果:</strong> ["Nigel Rees", "Evelyn Waugh", "Herman Melville", "J.R.R. Tolkien"]</p>
+        </div>
+        
+        <div class="example">
+            <h3>2. 获取所有作者（递归搜索）</h3>
+            <p><strong>JSONPath:</strong> <code>$..author</code></p>
+            <p><strong>结果:</strong> ["Nigel Rees", "Evelyn Waugh", "Herman Melville", "J.R.R. Tolkien"]</p>
+        </div>
+        
+        <div class="example">
+            <h3>3. 获取 store 中的所有元素</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.*</code></p>
+            <p><strong>结果:</strong> [book数组, bicycle对象]</p>
+        </div>
+        
+        <div class="example">
+            <h3>4. 获取所有书籍的价格</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.book[*].price</code></p>
+            <p><strong>结果:</strong> [8.95, 12.99, 8.99, 22.99]</p>
+        </div>
+        
+        <div class="example">
+            <h3>5. 获取第三本书</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.book[2]</code></p>
+            <p><strong>结果:</strong> {"category": "fiction", "author": "Herman Melville", "title": "Moby Dick", "isbn": "0-553-21311-3", "price": 8.99}</p>
+        </div>
+        
+        <div class="example">
+            <h3>6. 获取最后一本书</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.book[-1]</code></p>
+            <p><strong>结果:</strong> {"category": "fiction", "author": "J.R.R. Tolkien", "title": "The Lord of the Rings", "isbn": "0-395-19395-8", "price": 22.99}</p>
+        </div>
+        
+        <div class="example">
+            <h3>7. 获取前两本书</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.book[0:2]</code></p>
+            <p><strong>结果:</strong> [第一本书, 第二本书]</p>
+        </div>
+        
+        <div class="example">
+            <h3>8. 过滤价格低于 10 的书籍</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.book[?(@.price < 10)]</code></p>
+            <p><strong>结果:</strong> [第一本书, 第三本书]</p>
+        </div>
+        
+        <div class="example">
+            <h3>9. 获取所有有 ISBN 的书籍</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.book[?(@.isbn)]</code></p>
+            <p><strong>结果:</strong> [第三本书, 第四本书]</p>
+        </div>
+        
+        <div class="example">
+            <h3>10. 获取所有价格高于 expensive 值的书籍</h3>
+            <p><strong>JSONPath:</strong> <code>$.store.book[?(@.price > $.expensive)]</code></p>
+            <p><strong>结果:</strong> [第二本书, 第四本书]</p>
+        </div>
+    </section>
+    
+    <section>
+        <h2>JSONPath 实现</h2>
+        <p>JSONPath 有多种编程语言的实现：</p>
+        <ul>
+            <li>JavaScript: jsonpath, jsonpath-plus</li>
+            <li>Python: jsonpath-ng, jsonpath-rw</li>
+            <li>Java: Jayway JsonPath</li>
+            <li>.NET: Json.NET</li>
+            <li>PHP: FlowCommunications/JSONPath</li>
+        </ul>
+        
+        <div class="note">
+            <p><strong>注意：</strong>不同实现之间可能有细微的语法差异，请参考具体实现的文档。</p>
+        </div>
+    </section>
+    
+    <footer>
+        <p>参考: <a href="https://goessner.net/articles/JsonPath/" target="_blank">Stefan Goessner's JSONPath</a></p>
+        <p>最后更新: 2025年9月9日</p>
+    </footer>
+</body>
+</html>
