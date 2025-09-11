@@ -1,0 +1,1 @@
+cp *.html BingSiteAuth.xml b8b133d4654b45bfbe3194759186db95.txt robots.txt sitemap.xml /Users/tyi/Documents/dev/vscodeJava/webProjects/cloudflare/blog
