@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- 基础元数据 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO关键元数据 -->
+    <title>Cron表达式完整指南：从秒到年字段详解及使用示例 | Cron语法教程</title>
+    <meta name="description" content="全面详细的Cron表达式教程，包含从秒到年所有字段的完整说明、取值范围、特殊字符用法，以及实际工作中常用的20+个Cron表达式示例。学习如何编写精确的定时任务表达式。">
+    <meta name="keywords" content="Cron表达式,Cron语法,定时任务,任务调度,Linux Cron,Quartz Cron,时间表达式,秒分时日,月周年字段,特殊字符,示例教程">
+    
+    <!-- 结构化数据标记 (Schema.org) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Cron表达式完整指南：从秒到年字段详解及使用示例",
+        "description": "全面详细的Cron表达式教程，包含从秒到年所有字段的完整说明、取值范围、特殊字符用法，以及实际工作中常用的Cron表达式示例。",
+        "author": {
+            "@type": "Organization",
+            "name": "技术文档中心"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "技术文档中心",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://example.com/logo.png"
+            }
+        },
+        "datePublished": "2024-01-15",
+        "dateModified": "2024-01-15",
+        "image": "https://example.com/cron-expression-guide-og.jpg",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://example.com/cron-expression-guide"
+        },
+        "articleSection": "编程教程",
+        "keywords": "Cron表达式,Cron语法,定时任务,任务调度,Linux Cron,Quartz Cron",
+        "inLanguage": "zh-CN",
+        "wordCount": "2500"
+    }
+    </script>
+    
+    <!-- Open Graph协议 (社交媒体分享优化) -->
+    <meta property="og:title" content="Cron表达式完整指南：从秒到年字段详解及使用示例">
+    <meta property="og:description" content="全面详细的Cron表达式教程，包含从秒到年所有字段的完整说明、取值范围、特殊字符用法，以及实际工作中常用的20+个Cron表达式示例。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://tyijion.github.io/blog/cron.html">
+    <meta property="og:image" content="https://tyijion.github.io/blog/cron-logo.png">
+    <meta property="og:site_name" content="技术文档中心">
+    <meta property="og:locale" content="zh_CN">
+    
+    <!-- Twitter Card数据 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cron表达式完整指南：从秒到年字段详解及使用示例">
+    <meta name="twitter:description" content="全面详细的Cron表达式教程，包含从秒到年所有字段的完整说明、取值范围、特殊字符用法，以及实际工作中常用的Cron表达式示例。">
+    <meta name="twitter:image" content="⏰">
+    <meta name="twitter:creator" content="@techdocs">
+    
+    <!-- 搜索引擎指令 -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    
+    <!-- 规范链接 -->
+    <!-- <link rel="canonical" href="https://example.com/cron-expression-guide"> -->
+    
+    <!-- 本地化 -->
+    <meta name="language" content="Chinese">
+    <meta name="geo.region" content="CN">
+    <meta name="geo.placename" content="China">
+    
+    <!-- 网站验证 -->
+    <!-- <meta name="google-site-verification" content="your-verification-code">
+    <meta name="baidu-site-verification" content="your-verification-code"> -->
+    
+    <!-- 图标 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏰</text></svg>">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- 面包屑导航结构化数据 
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "首页",
+            "item": "https://example.com"
+        },{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "编程教程",
+            "item": "https://example.com/tutorials"
+        },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Cron表达式完整指南",
+            "item": "https://example.com/cron-expression-guide"
+        }]
+    }
+    </script>-->
+    
+    <!-- FAQ结构化数据 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Cron表达式有几个字段？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cron表达式通常有6或7个字段，分别表示：秒（可选）、分、时、日、月、周、年（可选）。标准Linux Cron使用5或6个字段（不含秒），而Quartz Cron使用6或7个字段（包含秒）。"
+            }
+        }, {
+            "@type": "Question",
+            "name": "Cron表达式中哪些字段是必选的？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "在标准的7字段Cron表达式中，秒、分、时、日、月、周字段是必选的，只有年字段是可选的。在传统6字段Cron中，所有字段都是必选的。"
+            }
+        }, {
+            "@type": "Question",
+            "name": "Cron表达式中#符号是什么意思？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "#符号用于周字段，表示第几个星期几。格式为X#Y，其中X是星期几（0-7，0和7表示周日），Y是第几个（1-5）。例如5#3表示第三个周五。"
+            }
+        }]
+    }
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a6fa5;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .header p {
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        
+        h2, h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        /* 表格样式 - 水平布局 */
+        .cron-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 1000px;
+        }
+        
+        .cron-table th {
+            background-color: #4a6fa5;
+            color: white;
+            font-weight: bold;
+            padding: 15px 10px;
+            text-align: center;
+            border: 1px solid #3a5985;
+            min-width: 140px;
+        }
+        
+        .cron-table td {
+            padding: 15px 10px;
+            text-align: center;
+            border: 1px solid #eaeaea;
+            vertical-align: top;
+            min-width: 140px;
+        }
+        
+        .cron-table tr:nth-child(even) {
+            background-color: #f9fafc;
+        }
+        
+        .row-header {
+            background-color: #f0f4f8;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: left;
+            padding-left: 15px !important;
+            width: 120px;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        
+        .value-range {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .optional {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .required {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .special-chars {
+            font-family: 'Courier New', monospace;
+            color: #c0392b;
+            font-weight: bold;
+            line-height: 1.8;
+        }
+        
+        .description {
+            text-align: left;
+            line-height: 1.6;
+        }
+        
+        .example {
+            font-family: 'Courier New', monospace;
+            background-color: #f4f4f4;
+            padding: 3px 6px;
+            border-radius: 3px;
+            color: #2c3e50;
+            font-size: 13px;
+            margin: 4px 0;
+            display: inline-block;
+        }
+        
+        /* 字段名称样式 */
+        .field-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #f4f4f4;
+        }
+        
+        .field-desc {
+            font-size: 12px;
+            color: #f4f4f4;
+            margin-bottom: 8px;
+        }
+        
+        /* 示例表格样式 */
+        .examples-container {
+            margin-top: 40px;
+        }
+        
+        .examples-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .examples-table th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            padding: 15px 12px;
+            text-align: left;
+            border: 1px solid #2980b9;
+        }
+        
+        .examples-table td {
+            padding: 15px 12px;
+            text-align: left;
+            border: 1px solid #eaeaea;
+            vertical-align: top;
+        }
+        
+        .examples-table tr:nth-child(even) {
+            background-color: #f9fafc;
+        }
+        
+        .examples-table tr:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .cron-expr {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #c0392b;
+            background-color: #f9f9f9;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            min-width: 200px;
+        }
+        
+        .cron-desc {
+            color: #555;
+        }
+        
+        /* 特殊字符说明 */
+        .special-chars-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #4a6fa5;
+        }
+        
+        .special-chars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .char-item {
+            background-color: white;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .char-symbol {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .char-desc {
+            color: #555;
+            font-size: 13px;
+        }
+        
+        /* 注意事项 */
+        .notes {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f0f7ff;
+            border-radius: 5px;
+            border-left: 4px solid #4a6fa5;
+        }
+        
+        .notes h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .notes ul {
+            padding-left: 20px;
+        }
+        
+        .notes li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        /* SEO优化内容 */
+        .seo-content {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .seo-content h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .seo-content p {
+            margin-bottom: 15px;
+            color: #444;
+            line-height: 1.8;
+        }
+        
+        .seo-content ul {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .seo-content li {
+            margin-bottom: 10px;
+            color: #444;
+        }
+        
+        /* 面包屑导航 */
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .breadcrumb a {
+            color: #4a6fa5;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb span {
+            margin: 0 5px;
+            color: #999;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .cron-table, .examples-table {
+                font-size: 13px;
+            }
+            
+            .cron-table th,
+            .cron-table td,
+            .examples-table th,
+            .examples-table td {
+                padding: 12px 8px;
+            }
+            
+            .row-header {
+                width: 100px;
+                padding-left: 10px !important;
+            }
+            
+            .cron-expr {
+                min-width: 180px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 15px;
+            }
+            
+            .special-chars-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .examples-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .cron-expr {
+                min-width: 150px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Cron表达式完整指南：从秒到年字段详解及使用示例</h1>
+        <p>全面详细的Cron表达式教程，包含从秒到年所有字段的完整说明、取值范围、特殊字符用法，以及实际工作中常用的20+个Cron表达式示例。学习如何编写精确的定时任务表达式。</p>
+    </div>
+    
+    <div class="container">
+        <h2>Cron字段说明表</h2>
+        <table class="cron-table">
+            <thead>
+                <tr>
+                    <th class="row-header">字段</th>
+                    <th>
+                        <div class="field-name">秒</div>
+                        <div class="field-desc">(Seconds)</div>
+                    </th>
+                    <th>
+                        <div class="field-name">分</div>
+                        <div class="field-desc">(Minutes)</div>
+                    </th>
+                    <th>
+                        <div class="field-name">时</div>
+                        <div class="field-desc">(Hours)</div>
+                    </th>
+                    <th>
+                        <div class="field-name">日</div>
+                        <div class="field-desc">(Day of month)</div>
+                    </th>
+                    <th>
+                        <div class="field-name">月</div>
+                        <div class="field-desc">(Month)</div>
+                    </th>
+                    <th>
+                        <div class="field-name">周</div>
+                        <div class="field-desc">(Day of week)</div>
+                    </th>
+                    <th>
+                        <div class="field-name">年</div>
+                        <div class="field-desc">(Year)</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="row-header">取值范围</td>
+                    <td><span class="value-range">0-59</span></td>
+                    <td><span class="value-range">0-59</span></td>
+                    <td><span class="value-range">0-23</span></td>
+                    <td><span class="value-range">1-31</span></td>
+                    <td><span class="value-range">1-12<br>或 JAN-DEC</span></td>
+                    <td><span class="value-range">0-6 或 SUN-SAT<br>(0和7都表示周日)</span></td>
+                    <td><span class="value-range">1970-2099</span></td>
+                </tr>
+                <tr>
+                    <td class="row-header">是否可选</td>
+                    <td><span class="required">必选</span></td>
+                    <td><span class="required">必选</span></td>
+                    <td><span class="required">必选</span></td>
+                    <td><span class="required">必选</span></td>
+                    <td><span class="required">必选</span></td>
+                    <td><span class="required">必选</span></td>
+                    <td><span class="optional">可选</span></td>
+                </tr>
+                <tr>
+                    <td class="row-header">特殊字符</td>
+                    <td><span class="special-chars">, - * /</span></td>
+                    <td><span class="special-chars">, - * /</span></td>
+                    <td><span class="special-chars">, - * /</span></td>
+                    <td><span class="special-chars">, - * ? / L W</span></td>
+                    <td><span class="special-chars">, - * /</span></td>
+                    <td><span class="special-chars">, - * ? / L #</span></td>
+                    <td><span class="special-chars">, - * /</span></td>
+                </tr>
+                <tr>
+                    <td class="row-header">说明和示例</td>
+                    <td class="description">
+                        <div>指定分钟内的秒数</div>
+                        <span class="example">0</span> 每分钟的0秒<br>
+                        <span class="example">*/10</span> 每10秒
+                    </td>
+                    <td class="description">
+                        <div>指定小时内的分钟数</div>
+                        <span class="example">30</span> 每小时的30分<br>
+                        <span class="example">0,15,30,45</span> 每15分钟
+                    </td>
+                    <td class="description">
+                        <div>指定天内的小时数</div>
+                        <span class="example">0</span> 午夜<br>
+                        <span class="example">9-17</span> 9点到17点
+                    </td>
+                    <td class="description">
+                        <div>指定月内的天数</div>
+                        <span class="example">1</span> 每月第一天<br>
+                        <span class="example">L</span> 最后一天<br>
+                        <span class="example">15W</span> 15日最近的工作日
+                    </td>
+                    <td class="description">
+                        <div>指定年内的月份</div>
+                        <span class="example">1</span> 一月<br>
+                        <span class="example">*/3</span> 每三个月<br>
+                        <span class="example">JAN,MAR,MAY</span> 1,3,5月
+                    </td>
+                    <td class="description">
+                        <div>指定周内的星期几</div>
+                        <span class="example">1</span> 周一<br>
+                        <span class="example">MON-FRI</span> 周一到周五<br>
+                        <span class="example">5#3</span> 第三个周五<br>
+                        <span class="example">2L</span> 最后一个周一
+                    </td>
+                    <td class="description">
+                        <div>指定年份，可省略</div>
+                        <span class="example">2023</span> 2023年<br>
+                        <span class="example">2023-2025</span> 2023到2025年<br>
+                        <span class="example">*</span> 每年
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br/>
+        <a href="https://www.toolsjy.com/cron" target="_blank"> 在线解析/反向解析Cron工具 </a>
+
+        <div class="examples-container">
+            <h3>Cron表达式常用示例</h3>
+            <table class="examples-table">
+                <thead>
+                    <tr>
+                        <th width="25%">Cron表达式</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="cron-expr">0/2 * * * * ?</div></td>
+                        <td class="cron-desc">每2秒执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0/2 * * * ?</div></td>
+                        <td class="cron-desc">每2分钟执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0 2 1 * ?</div></td>
+                        <td class="cron-desc">每月1日的凌晨2点执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 15 10 ? * MON-FRI</div></td>
+                        <td class="cron-desc">周一到周五每天上午10:15执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0 10,14,16 * * ?</div></td>
+                        <td class="cron-desc">每天上午10点、下午2点、4点执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0/30 9-17 * * ?</div></td>
+                        <td class="cron-desc">朝九晚五工作时间内每半小时执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0 12 ? * WED</div></td>
+                        <td class="cron-desc">每个星期三中午12点执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0 12 * * ?</div></td>
+                        <td class="cron-desc">每天中午12点执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 15 10 ? * *</div></td>
+                        <td class="cron-desc">每天上午10:15执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 15 10 * * ?</div></td>
+                        <td class="cron-desc">每天上午10:15执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 15 10 * * ? 2005</div></td>
+                        <td class="cron-desc">2005年每天上午10:15执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 * 14 * * ?</div></td>
+                        <td class="cron-desc">每天下午2点到2:59期间的每分钟执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0/5 14 * * ?</div></td>
+                        <td class="cron-desc">每天下午2点到2:55期间的每5分钟执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0/5 14,18 * * ?</div></td>
+                        <td class="cron-desc">每天下午2点到2:55和下午6点到6:55期间的每5分钟执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 0-5 14 * * ?</div></td>
+                        <td class="cron-desc">每天下午2点到2:05期间的每分钟执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 10,44 14 ? 3 WED</div></td>
+                        <td class="cron-desc">每年3月的星期三下午2:10和2:44执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 15 10 ? * MON-FRI</div></td>
+                        <td class="cron-desc">周一至周五上午10:15执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 15 10 15 * ?</div></td>
+                        <td class="cron-desc">每月15日上午10:15执行任务</td>
+                    </tr>
+                    <tr>
+                        <td><div class="cron-expr">0 15 10 ? * 5#3</div></td>
+                        <td class="cron-desc">每月第三个星期五上午10:15执行任务 (5=周五)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- SEO优化内容区域 -->
+        <div class="seo-content">
+            <h3>什么是Cron表达式？</h3>
+            <p>Cron表达式是一种用于配置定时任务执行时间的字符串格式。它最初在Unix和Linux系统中使用，现在已被广泛用于各种编程语言和框架中，如Java的Spring框架、Quartz调度器、Python的APScheduler等。Cron表达式允许开发者精确控制任务执行的频率和时间点。</p>
+            
+            <h3>Cron表达式的两种主要格式</h3>
+            <ul>
+                <li><strong>标准Unix/Linux Cron格式</strong>：包含5个或6个字段（分、时、日、月、周，有时包含秒），例如："0 15 10 * * ?" 表示每天10:15执行</li>
+                <li><strong>Quartz Cron格式</strong>：包含6个或7个字段（秒、分、时、日、月、周、年），提供了更精确的时间控制</li>
+            </ul>
+            
+            <h3>学习Cron表达式的重要性</h3>
+            <p>掌握Cron表达式对于后端开发、DevOps、系统管理员等岗位至关重要。无论是定时备份数据库、发送日报邮件、清理临时文件，还是执行复杂的批处理任务，都需要使用Cron表达式来配置执行时间。理解Cron表达式的每个字段、特殊字符和取值范围，可以帮助您编写更精确、更可靠的定时任务。</p>
+        </div>
+        
+        <div class="special-chars-section">
+            <h3>特殊字符说明</h3>
+            <div class="special-chars-grid">
+                <div class="char-item">
+                    <div class="char-symbol">*</div>
+                    <div class="char-desc">所有值。例如在分字段表示每分钟</div>
+                </div>
+                <div class="char-item">
+                    <div class="char-symbol">-</div>
+                    <div class="char-desc">范围。例如在时字段"9-17"表示9点到17点</div>
+                </div>
+                <div class="char-item">
+                    <div class="char-symbol">,</div>
+                    <div class="char-desc">多个值。例如在周字段"MON,WED,FRI"表示周一、三、五</div>
+                </div>
+                <div class="char-item">
+                    <div class="char-symbol">/</div>
+                    <div class="char-desc">步长。例如在分字段"*/15"表示每15分钟</div>
+                </div>
+                <div class="char-item">
+                    <div class="char-symbol">?</div>
+                    <div class="char-desc">不指定值。仅用于日和周字段，表示无特定值</div>
+                </div>
+                <div class="char-item">
+                    <div class="char-symbol">L</div>
+                    <div class="char-desc">最后。例如在日字段"L"表示最后一天；在周字段"6L"表示最后一个周六</div>
+                </div>
+                <div class="char-item">
+                    <div class="char-symbol">W</div>
+                    <div class="char-desc">工作日。仅用于日字段，表示最近的工作日</div>
+                </div>
+                <div class="char-item">
+                    <div class="char-symbol">#</div>
+                    <div class="char-desc">第几个周几。仅用于周字段，例如"5#3"表示第三个周五(5=周五，#前为星期几0-7)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="notes">
+            <h3>注意事项</h3>
+            <ul>
+                <li>Cron表达式有6位（不含年）或7位（含年）两种格式，大多数系统支持6位格式</li>
+                <li>年和秒字段不是所有Cron实现都支持，但标准Quartz Cron支持完整的7位格式</li>
+                <li>日和周字段通常互斥，当一个字段有具体值时，另一个字段通常使用 ?</li>
+                <li>月份和周可以使用英文缩写（JAN-DEC, SUN-SAT），不区分大小写</li>
+                <li>周字段中，0和7都表示周日，1=周一，2=周二，3=周三，4=周四，5=周五，6=周六</li>
+                <li>#字符用法：前面为星期几(0-7)，后面为第几个(1-5)，如"5#3"表示第三个周五</li>
+                <li>L字符用法：在日字段单独使用表示最后一天；在周字段前加数字如"6L"表示最后一个周六</li>
+                <li>W字符指定的日期如果恰逢周六或周日，则会向前或向后找到最近的工作日</li>
+                <li>LW组合：在日字段"LW"表示当月最后一个工作日</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
