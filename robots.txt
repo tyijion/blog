@@ -1,2 +1,4 @@
 User-Agent: *
 Disallow:
+
+Sitemap: https://tyijion.github.io/sitemap.xml
